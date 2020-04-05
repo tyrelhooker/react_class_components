@@ -1,36 +1,42 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  // const myGreetings = [
-  //   {
-  //     normal: 'Hello Function Component', 
-  //     happy: 'HELLO!!!!! Function Component',
-  //     sad: '...hellooo, function compooonent'
-  //   }
-  // ];
+const API = 'https://api.randomuser.me/?nat=US&results=5'
+// const DEFAULT_QUERY = 5;
 
-  const getDummyData = (count = 5) => {
-    fetch(`https://api.randomuser.me/?nat=US&results=${count}`)
-    .then(response => response.json())
-    .then(data => {
-      const myData = data;
-      console.log(myData);
-      // return myData
-      return (
-
-       
-        <p>
-          {myData}
-        </p>
-      )
-    })
-    .catch(err => console.error(`There has been an error with your fetch operation ${err.message}`))
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      results: [],
+    };
   }
-  
-  console.log(getDummyData(10));
 
-  return (getDummyData(10))
+  componentDidMount() {
+    fetch(API)
+      .then(response => response.json())
+      // .then(data => console.log(data))
+      .then(data => this.setState({ results: data.results }))
+      .catch(err => console.error(`There has been an error with your fetch operation ${err.message}`));
+  }
+
+  render() {
+    const { results } = this.state;
+    const staticResults = results;
+    return (
+      <ul>
+        {staticResults.map(result =>
+          <li key={result.id.value}>
+            <ul>
+              <li>{`${result.name.last}, ${result.name.first}`}</li>
+              <li>{result.email}</li>
+              <br></br>
+            </ul>
+          </li>
+        )}
+      </ul>
+    );
+  }
 
 }
   
