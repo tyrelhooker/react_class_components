@@ -16,16 +16,19 @@ class App extends Component {
     fetch(API)
       .then(response => response.json())
       // .then(data => console.log(data))
-      .then(data => this.setState({ results: data.results }))
+      .then((data) => {
+        // console.log(this.state.results === [])
+        this.setState({ results: data.results })
+      })
       .catch(err => console.error(`There has been an error with your fetch operation ${err.message}`));
   }
 
   render() {
     const { results } = this.state;
-    const staticResults = results;
+    // const staticResults = results;
     return (
       <ul>
-        {staticResults.map(result =>
+        {results.map(result =>
           <li key={result.id.value}>
             <ul>
               <li>{`${result.name.last}, ${result.name.first}`}</li>
